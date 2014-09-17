@@ -2,7 +2,7 @@ require 'rspec'
 require 'pry'
 require_relative "../lib/application"
 
-describe 'Updating the application model' do
+describe 'Event Sourcing' do
 
   let(:sf) { Port.new(city: "San Francisco", country: :USA) }
   let(:la) { Port.new(city: "Los Angeles", country: :USA) }
@@ -11,20 +11,22 @@ describe 'Updating the application model' do
   let(:refactoring_books) { Cargo.new("Refactoring") }
   let(:event_processor) { EventProcessor.new }
 
-  it 'sets the ships location on arrival' do
-    event = ArrivalEvent.new(date: Time.new(2005,11,01), ship: ship, port: sf)
-    event_processor.process(event)
-    expect(ship.location).to eql sf
-  end
+  describe 'Ship Movements' do
+    it 'sets the ships location on arrival' do
+      event = ArrivalEvent.new(date: Time.new(2005,11,01), ship: ship, port: sf)
+      event_processor.process(event)
+      expect(ship.location).to eql sf
+    end
 
-  it 'puts the ship at sea when departing from a port' do
-    events = [
-      ArrivalEvent.new(  date: Time.new(2005,10,01), ship: ship, port: la),
-      ArrivalEvent.new(  date: Time.new(2005,11,01), ship: ship, port: sf),
-      DepartureEvent.new(date: Time.new(2005,11,01), ship: ship, port: sf)
-    ]
-    event_processor.process(events)
-    expect(ship.location).to eql :at_sea
+    it 'puts the ship at sea when departing from a port' do
+      events = [
+        ArrivalEvent.new(  date: Time.new(2005,10,01), ship: ship, port: la),
+        ArrivalEvent.new(  date: Time.new(2005,11,01), ship: ship, port: sf),
+        DepartureEvent.new(date: Time.new(2005,11,02), ship: ship, port: sf)
+      ].shuffle # shuffle is intentional, tests that the ordering doesn't matter
+      event_processor.process(events)
+      expect(ship.location).to eql :at_sea
+    end
   end
 
   describe 'keeping track of Canada' do
@@ -34,7 +36,7 @@ describe 'Updating the application model' do
         DepartureEvent.new(date: Time.new(2005,11,02), ship: ship, port: la),
         ArrivalEvent.new(  date: Time.new(2005,11,24), ship: ship, port: sf),
         UnloadEvent.new(   date: Time.new(2005,11,25), ship: ship, cargo: refactoring_books)
-      ]
+      ].shuffle
       event_processor.process(events)
       expect(refactoring_books).to_not have_been_in_canada
     end
@@ -46,7 +48,7 @@ describe 'Updating the application model' do
         DepartureEvent.new(date: Time.new(2005,11,14), ship: ship, port: yyv),
         ArrivalEvent.new(  date: Time.new(2005,11,24), ship: ship, port: sf),
         UnloadEvent.new(   date: Time.new(2005,11,25), ship: ship, cargo: refactoring_books)
-      ]
+      ].shuffle
       event_processor.process(events)
       expect(refactoring_books).to have_been_in_canada
     end
