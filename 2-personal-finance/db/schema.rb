@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140922151550) do
+ActiveRecord::Schema.define(version: 20140924133758) do
 
   create_table "account_events", force: true do |t|
     t.date     "date"
@@ -23,6 +23,18 @@ ActiveRecord::Schema.define(version: 20140922151550) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "account_snapshots", force: true do |t|
+    t.integer  "account_id"
+    t.float    "balance"
+    t.date     "date"
+    t.integer  "predecessor_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "account_snapshots", ["account_id"], name: "index_account_snapshots_on_account_id"
+  add_index "account_snapshots", ["predecessor_id"], name: "index_account_snapshots_on_predecessor_id"
 
   create_table "accounts", force: true do |t|
     t.string   "institution"

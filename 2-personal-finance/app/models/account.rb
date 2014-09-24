@@ -6,8 +6,7 @@ class Account < ActiveRecord::Base
     self
   end
 
-  def balance
-    EventLog.process!
-    self.reload.cached_balance
+  def balance(on: Date.today)
+    BalanceQuery.new(date: on, account: self).execute.balance
   end
 end

@@ -8,9 +8,15 @@ RSpec.describe "Importing CSV Files" do
   context "when importing bank.csv" do
     let(:file) { File.absolute_path("bank.csv") }
     it "has the correct balance" do
-      expect(account.import(file).balance).to be_within(0.001).of(-10122.05)
+      account.import(file)
+      EventLog.process!
+      expect(account.balance).to be_within(0.01).of(-10122.05)
+    end
+    it "has the correct balance" do
+      account.import(file)
+      EventLog.process!
+      amount = account.balance(on: Date.parse("2014-08-01"));
+      expect(amount).to be_within(0.01).of(-16682.89)
     end
   end
 end
-
-
