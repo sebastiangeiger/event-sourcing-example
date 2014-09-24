@@ -19,7 +19,7 @@ RSpec.describe "Importing CSV Files" do
       account.import(file)
       EventLog.process!
       amount = account.balance(on: Date.parse("2014-08-01"));
-      expect(amount).to be_within(0.01).of(-16682.89)
+      expect(amount).to be_within(0.01).of(-9853.53)
     end
   end
 end
