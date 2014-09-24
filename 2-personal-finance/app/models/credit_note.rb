@@ -1,11 +1,9 @@
 class CreditNote < AccountEvent
 
-  def process!(snapshot = nil)
-    if snapshot
-      snapshot.temp_balance += amount
-    else
-      account.cached_balance += amount
-      account.save # TODO: Need to remove that
-    end
+  def process!(snapshot)
+    snapshot = snapshot.dup
+    snapshot.date = date
+    snapshot.temp_balance += amount
+    snapshot
   end
 end

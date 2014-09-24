@@ -17,12 +17,14 @@ class BalanceQuery
 
   def events_since_snapshot
     AccountEvent.
-      where(['date > ? and date <= ? and account_id = ?', nearest_snapshot.date, @date, @account.id]).
-      all
+      where(['date > ? and date <= ? and account_id = ?', nearest_snapshot.date, @date, @account.id])
   end
 
   def combine(snapshot, additional_events)
-    EventLog.new(snapshot: snapshot, events: additional_events).process
+    ProcessingContext.new(starting_snapshot: snapshot, events: additional_events).
+      process.
+      snapshots.
+      last
   end
 
 end

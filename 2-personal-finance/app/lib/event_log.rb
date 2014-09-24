@@ -12,12 +12,7 @@ class EventLog #TODO: Needs to have AccountEventLog
   end
 
   def process
-    @events.each do |event|
-      event.process!(@snapshot)
-    end
-    @snapshot
   end
-
   def self.process!
     new.process
   end
