@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140924133758) do
+ActiveRecord::Schema.define(version: 20140924160641) do
 
   create_table "account_events", force: true do |t|
     t.date     "date"
@@ -42,6 +42,8 @@ ActiveRecord::Schema.define(version: 20140924133758) do
     t.float    "cached_balance", default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "import_date"
+    t.float    "import_balance"
   end
 
 end

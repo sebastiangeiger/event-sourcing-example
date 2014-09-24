@@ -1,4 +1,4 @@
-class EventLog
+class EventLog #TODO: Needs to have AccountEventLog
 
   def initialize(snapshot: nil, events: nil)
     @events = events || AccountEvent.order('date ASC')

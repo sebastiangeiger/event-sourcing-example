@@ -1,7 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "Importing CSV Files" do
-  let(:account) { Account.create(number: "123456", institution: "Wells Fargo") }
+  let(:account) { Account.create(number: "123456",
+                                 institution: "Wells Fargo",
+                                 import_date: Date.parse("2014-03-01"),
+                                 import_balance: 0) }
   it "has the correct balance" do
     expect(account.balance).to be_within(0.001).of(0)
   end

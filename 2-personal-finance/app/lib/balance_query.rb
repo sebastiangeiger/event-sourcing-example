@@ -12,9 +12,7 @@ class BalanceQuery
   private
 
   def nearest_snapshot
-    @nearest_snapshot ||= AccountSnapshot.
-      where(['date < ? and account_id = ?', @date, @account.id]).
-      order('date DESC').first || raise("No snapshot found")
+    @nearest_snapshot ||= AccountSnapshot.nearest_snapshot(date: @date, account: @account)
   end
 
   def events_since_snapshot
