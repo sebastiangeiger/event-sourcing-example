@@ -9,4 +9,8 @@ class Account < ActiveRecord::Base
   def balance(on: Date.today)
     BalanceQuery.new(date: on, account: self).execute.balance
   end
+
+  def initial_snapshot
+    InitialAccountSnapshot.new(self)
+  end
 end

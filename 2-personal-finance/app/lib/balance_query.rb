@@ -6,18 +6,17 @@ class BalanceQuery
 
   def execute
     snapshot = combine(nearest_snapshot, events_since_snapshot)
-    OpenStruct.new(balance: snapshot.temp_balance)
+    OpenStruct.new(balance: snapshot[:balance])
   end
 
   private
 
   def nearest_snapshot
-    @nearest_snapshot ||= AccountSnapshot.nearest_snapshot(date: @date, account: @account)
+    @nearest_snapshot ||= AccountSnapshot.nearest_snapshot(date: @date, account: @account).to_hash
   end
 
   def events_since_snapshot
-    AccountEvent.
-      where(['date > ? and date <= ? and account_id = ?', nearest_snapshot.date, @date, @account.id])
+    AccountEventLog.new(@account).events(between: @nearest_snapshot[:date] .. @date)
   end
 
   def combine(snapshot, additional_events)
