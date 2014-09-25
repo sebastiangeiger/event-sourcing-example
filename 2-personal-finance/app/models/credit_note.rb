@@ -1,6 +1,6 @@
 class CreditNote < AccountEvent
 
-  def process!(snapshot)
+  def process(snapshot)
     snapshot = snapshot.dup
     snapshot.date = date
     snapshot.temp_balance += amount

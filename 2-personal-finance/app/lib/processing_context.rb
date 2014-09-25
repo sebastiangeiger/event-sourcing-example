@@ -8,7 +8,7 @@ class ProcessingContext
 
   def process
     @events.each do |event|
-      @snapshots << event.process!(@snapshots.last)
+      @snapshots << event.process(@snapshots.last)
     end
     self
   end
