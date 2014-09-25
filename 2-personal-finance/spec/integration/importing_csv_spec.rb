@@ -24,5 +24,11 @@ RSpec.describe "Importing CSV Files" do
       balance = account.balance(on: Date.parse("2014-08-02"));
       expect(balance).to be_within(0.01).of(-7911.20)
     end
+
+    it "creates a snapshot every Sunday" do
+      EventLog.process!
+      sundays = (Date.parse("2014-03-01")..Date.today).select{|d| d.wday == 0}
+      expect(AccountSnapshot.where(account: account).pluck(:date)).to eql sundays
+    end
   end
 end

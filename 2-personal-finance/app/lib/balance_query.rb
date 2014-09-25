@@ -12,11 +12,11 @@ class BalanceQuery
   private
 
   def nearest_snapshot
-    @nearest_snapshot ||= AccountSnapshot.nearest_snapshot(date: @date, account: @account).to_hash
+    @nearest_snapshot ||= AccountSnapshot.nearest_snapshot(date: @date, account: @account)
   end
 
   def events_since_snapshot
-    AccountEventLog.new(@account).events(between: @nearest_snapshot[:date] .. @date)
+    AccountEventLog.new(@account).events(between: @nearest_snapshot.date .. @date)
   end
 
   def combine(snapshot, additional_events)

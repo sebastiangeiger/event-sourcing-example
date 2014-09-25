@@ -3,7 +3,7 @@ class ProcessingContext
 
   def initialize(starting_snapshot:,events:)
     @events = events
-    @snapshots = [starting_snapshot]
+    @snapshots = [starting_snapshot.to_hash]
   end
 
   def process
